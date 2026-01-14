@@ -33,37 +33,42 @@ export const AddDeviceForm = ({ onAdd, onNotification }: AddDeviceFormProps) => 
       <Button
         onClick={() => setIsOpen(true)}
         variant="outline"
-        className="w-full border-dashed border-primary/50 text-primary hover:bg-primary/10 hover:border-primary"
+        className="w-full h-full min-h-[120px] border-2 border-dashed border-primary/30 text-primary hover:bg-primary/5 hover:border-primary/50 rounded-2xl transition-all"
       >
-        <Plus className="w-4 h-4 mr-2" />
-        Adicionar Coletor
+        <Plus className="w-5 h-5 mr-2" />
+        Adicionar Equipamento
       </Button>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-card border border-border rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Package className="w-5 h-5 text-primary" />
-        <span className="font-display text-sm font-semibold">NOVO COLETOR</span>
+    <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-5">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center">
+          <Package className="w-5 h-5 text-success" />
+        </div>
+        <div>
+          <span className="font-display font-semibold">Novo Equipamento</span>
+          <p className="text-xs text-muted-foreground">Cadastrar no sistema</p>
+        </div>
       </div>
 
       <div className="space-y-3">
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Nome do coletor (ex: Coletor Zebra 001)"
-          className="bg-input border-border focus:border-primary"
+          placeholder="Nome do equipamento"
+          className="bg-input border-border focus:border-primary rounded-xl"
         />
         <Input
           value={barcode}
           onChange={(e) => setBarcode(e.target.value.toUpperCase())}
-          placeholder="Código de barras (ex: AWS-001)"
-          className="bg-input border-border focus:border-primary font-mono uppercase"
+          placeholder="Código de barras único"
+          className="bg-input border-border focus:border-primary font-mono uppercase rounded-xl"
         />
 
-        <div className="flex gap-2">
-          <Button type="submit" className="flex-1 bg-success hover:bg-success/80 text-success-foreground">
+        <div className="flex gap-2 pt-2">
+          <Button type="submit" className="flex-1 bg-success hover:bg-success/80 text-success-foreground rounded-xl">
             <Plus className="w-4 h-4 mr-2" />
             Cadastrar
           </Button>
@@ -71,7 +76,7 @@ export const AddDeviceForm = ({ onAdd, onNotification }: AddDeviceFormProps) => 
             type="button" 
             variant="outline" 
             onClick={() => setIsOpen(false)}
-            className="border-muted-foreground/30"
+            className="border-muted-foreground/30 rounded-xl"
           >
             Cancelar
           </Button>

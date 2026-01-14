@@ -70,17 +70,21 @@ export const ScanInput = ({ onScan, onNotification }: ScanInputProps) => {
 
   if (pendingDevice) {
     return (
-      <div className="bg-card border border-primary/30 rounded-lg p-6 neon-border-cyan">
-        <div className="flex items-center gap-2 mb-4">
-          <User className="w-5 h-5 text-primary" />
-          <span className="font-display font-bold">CHECKOUT</span>
+      <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+            <User className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <span className="font-display font-bold text-lg">Checkout</span>
+            <p className="text-xs text-muted-foreground">Registrar empréstimo</p>
+          </div>
         </div>
         
-        <div className="text-sm text-muted-foreground mb-2">
-          Coletor: <span className="text-foreground font-semibold">{pendingDevice.name}</span>
-        </div>
-        <div className="text-xs text-muted-foreground mb-4 font-mono">
-          {pendingDevice.barcode}
+        <div className="bg-card/50 rounded-xl p-4 mb-4">
+          <div className="text-sm text-muted-foreground mb-1">Equipamento selecionado</div>
+          <div className="text-foreground font-semibold">{pendingDevice.name}</div>
+          <div className="text-xs text-muted-foreground font-mono mt-1">{pendingDevice.barcode}</div>
         </div>
 
         <div className="flex gap-2">
@@ -90,12 +94,12 @@ export const ScanInput = ({ onScan, onNotification }: ScanInputProps) => {
             onChange={(e) => setOwnerName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleCheckout()}
             placeholder="Nome do responsável"
-            className="flex-1 bg-input border-border focus:border-primary"
+            className="flex-1 bg-input border-border focus:border-primary rounded-xl"
           />
-          <Button onClick={handleCheckout} className="bg-success hover:bg-success/80 text-success-foreground">
+          <Button onClick={handleCheckout} className="bg-success hover:bg-success/80 text-success-foreground rounded-xl px-4">
             <Send className="w-4 h-4" />
           </Button>
-          <Button onClick={cancelCheckout} variant="outline" className="border-destructive text-destructive hover:bg-destructive/20">
+          <Button onClick={cancelCheckout} variant="outline" className="border-destructive/50 text-destructive hover:bg-destructive/10 rounded-xl">
             Cancelar
           </Button>
         </div>
@@ -104,10 +108,15 @@ export const ScanInput = ({ onScan, onNotification }: ScanInputProps) => {
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Scan className="w-5 h-5 text-primary" />
-        <span className="font-display text-sm font-semibold">ESCANEAR CÓDIGO</span>
+    <div className="bg-card border border-border rounded-2xl p-5">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+          <Scan className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <span className="font-display font-semibold">Escanear</span>
+          <p className="text-xs text-muted-foreground">Empréstimo ou devolução</p>
+        </div>
       </div>
 
       <div className="flex gap-2">
@@ -116,10 +125,10 @@ export const ScanInput = ({ onScan, onNotification }: ScanInputProps) => {
           value={barcode}
           onChange={(e) => setBarcode(e.target.value.toUpperCase())}
           onKeyDown={(e) => e.key === 'Enter' && handleScan()}
-          placeholder="Código de barras..."
-          className="flex-1 bg-input border-border focus:border-primary font-mono uppercase"
+          placeholder="Digite ou escaneie o código..."
+          className="flex-1 bg-input border-border focus:border-primary font-mono uppercase rounded-xl"
         />
-        <Button onClick={handleScan} className="bg-primary hover:bg-primary/80 text-primary-foreground">
+        <Button onClick={handleScan} className="bg-primary hover:bg-primary/80 text-primary-foreground rounded-xl px-5">
           <Scan className="w-4 h-4" />
         </Button>
       </div>

@@ -39,7 +39,7 @@ const Index = () => {
   const borrowedDevices = filteredDevices.filter(d => d.status === 'emprestado');
 
   return (
-    <div className="h-screen flex flex-col bg-background cyber-grid overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-background">
       {notification && (
         <Notification
           message={notification.message}
@@ -50,85 +50,95 @@ const Index = () => {
 
       <Header total={stats.total} emprestados={stats.emprestados} />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex">
         {/* Main Content */}
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Controls */}
-          <div className="p-4 border-b border-border bg-card/50 backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-4xl">
-              <ScanInput onScan={scanDevice} onNotification={showNotification} />
-              <AddDeviceForm onAdd={addDevice} onNotification={showNotification} />
+        <main className="flex-1 flex flex-col">
+          {/* Controls Section */}
+          <div className="border-b border-border bg-gradient-to-b from-card/80 to-transparent">
+            <div className="max-w-7xl mx-auto p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <ScanInput onScan={scanDevice} onNotification={showNotification} />
+                <AddDeviceForm onAdd={addDevice} onNotification={showNotification} />
+              </div>
+              
+              {/* Search */}
+              <div className="mt-6">
+                <input
+                  type="text"
+                  placeholder="🔍 Buscar por nome, código ou responsável..."
+                  value={searchFilter}
+                  onChange={(e) => setSearchFilter(e.target.value)}
+                  className="w-full max-w-lg bg-input border border-border rounded-xl px-4 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Search */}
-          <div className="px-6 py-3 border-b border-border">
-            <input
-              type="text"
-              placeholder="Filtrar por nome, código ou responsável..."
-              value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
-              className="w-full max-w-md bg-input border border-border rounded px-3 py-2 text-sm font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-            />
-          </div>
-
           {/* Inventory */}
-          <div className="flex-1 overflow-y-auto p-6">
-            {devices.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                <Package className="w-16 h-16 mb-4 opacity-30" />
-                <h2 className="font-display text-xl mb-2">Nenhum Coletor Cadastrado</h2>
-                <p className="text-sm text-center max-w-md">
-                  Use o formulário acima para adicionar seus coletores Zebra ao sistema.
-                  Escaneie os códigos de barras para controlar empréstimos e devoluções.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {borrowedDevices.length > 0 && (
-                  <section>
-                    <h2 className="text-xs uppercase tracking-widest text-destructive mb-3 font-display flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-                      Em Uso ({borrowedDevices.length})
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                      {borrowedDevices.map(device => (
-                        <DeviceCard key={device.id} device={device} />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {availableDevices.length > 0 && (
-                  <section>
-                    <h2 className="text-xs uppercase tracking-widest text-success mb-3 font-display flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-success" />
-                      Disponíveis ({availableDevices.length})
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                      {availableDevices.map(device => (
-                        <DeviceCard 
-                          key={device.id} 
-                          device={device} 
-                          onRemove={handleRemove}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {filteredDevices.length === 0 && devices.length > 0 && (
-                  <div className="text-center py-12 text-muted-foreground">
-                    Nenhum resultado para "{searchFilter}"
+          <div className="flex-1 overflow-y-auto">
+            <div className="max-w-7xl mx-auto p-6">
+              {devices.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+                  <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                    <Package className="w-12 h-12 text-primary/50" />
                   </div>
-                )}
-              </div>
-            )}
+                  <h2 className="font-display text-2xl mb-3 text-foreground">Nenhum Equipamento</h2>
+                  <p className="text-sm text-center max-w-md leading-relaxed">
+                    Adicione equipamentos usando o formulário acima. 
+                    Escaneie códigos de barras para controlar empréstimos e devoluções.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {borrowedDevices.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-3 h-3 rounded-full bg-destructive animate-pulse" />
+                        <h2 className="text-sm font-semibold uppercase tracking-wider text-destructive">
+                          Em Uso ({borrowedDevices.length})
+                        </h2>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {borrowedDevices.map(device => (
+                          <DeviceCard key={device.id} device={device} />
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {availableDevices.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-3 h-3 rounded-full bg-success" />
+                        <h2 className="text-sm font-semibold uppercase tracking-wider text-success">
+                          Disponíveis ({availableDevices.length})
+                        </h2>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {availableDevices.map(device => (
+                          <DeviceCard 
+                            key={device.id} 
+                            device={device} 
+                            onRemove={handleRemove}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {filteredDevices.length === 0 && devices.length > 0 && (
+                    <div className="text-center py-16 text-muted-foreground">
+                      <p className="text-lg">Nenhum resultado para "{searchFilter}"</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </main>
 
         {/* Logs Sidebar */}
-        <div className="hidden lg:block">
+        <div className="hidden xl:block">
           <LogsSidebar logs={logs} />
         </div>
       </div>
