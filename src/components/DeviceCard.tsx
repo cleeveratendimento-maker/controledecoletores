@@ -13,54 +13,54 @@ export const DeviceCard = ({ device, onRemove }: DeviceCardProps) => {
   return (
     <div
       className={cn(
-        "relative border rounded-lg p-4 transition-all duration-300 group",
-        "hover:scale-[1.02] hover:shadow-lg",
+        "relative border rounded-2xl p-5 transition-all duration-300 group",
+        "hover:scale-[1.02] hover:shadow-xl",
         isAvailable 
-          ? "border-success/50 bg-success/5 hover:neon-border-green" 
-          : "border-destructive/50 bg-destructive/5 hover:neon-border-red"
+          ? "border-success/30 bg-gradient-to-br from-success/10 to-success/5 hover:border-success/50" 
+          : "border-destructive/30 bg-gradient-to-br from-destructive/10 to-destructive/5 hover:border-destructive/50"
       )}
     >
       {onRemove && isAvailable && (
         <button
           onClick={() => onRemove(device.id)}
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded bg-destructive/20 hover:bg-destructive/40 text-destructive"
-          title="Remover coletor"
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all p-2 rounded-lg bg-destructive/20 hover:bg-destructive/40 text-destructive"
+          title="Remover equipamento"
         >
-          <Trash2 className="w-3 h-3" />
+          <Trash2 className="w-4 h-4" />
         </button>
       )}
 
-      <div className="flex items-start gap-3">
+      <div className="flex flex-col">
         <div className={cn(
-          "w-8 h-8 rounded flex items-center justify-center shrink-0",
+          "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
           isAvailable ? "bg-success/20" : "bg-destructive/20"
         )}>
           <Package className={cn(
-            "w-4 h-4",
+            "w-6 h-6",
             isAvailable ? "text-success" : "text-destructive"
           )} />
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="text-[10px] font-mono text-muted-foreground tracking-wider">
+        <div className="space-y-1">
+          <div className="text-xs font-mono text-muted-foreground tracking-wider bg-muted/50 px-2 py-1 rounded inline-block">
             {device.barcode}
           </div>
-          <div className="font-semibold text-sm truncate">
+          <div className="font-semibold text-base truncate">
             {device.name}
           </div>
-
-          {isAvailable ? (
-            <div className="flex items-center gap-1.5 mt-2 text-xs neon-text-green">
-              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-glow" />
-              LIVRE
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 mt-2 text-xs neon-text-red">
-              <User className="w-3 h-3" />
-              {device.currentOwner}
-            </div>
-          )}
         </div>
+
+        {isAvailable ? (
+          <div className="flex items-center gap-2 mt-4 text-sm font-medium text-success">
+            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+            Disponível
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 mt-4 text-sm text-destructive">
+            <User className="w-4 h-4" />
+            <span className="truncate font-medium">{device.currentOwner}</span>
+          </div>
+        )}
       </div>
     </div>
   );
