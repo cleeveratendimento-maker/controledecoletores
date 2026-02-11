@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
-  Package, Sparkles, Users, CheckCircle, Clock, 
+  Package, ScanBarcode, Users, CheckCircle, Clock, 
   ArrowUpRight, ArrowDownLeft, Trash2, User, 
   Scan, Send, Plus, X, XCircle, Info, Search, History,
   LayoutGrid, List
@@ -247,7 +247,7 @@ const Header = ({ total, emprestados }: { total: number; emprestados: number }) 
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg shadow-primary/20">
-              <Sparkles className="w-5 h-5 text-primary-foreground" />
+              <ScanBarcode className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
               <h1 className="font-display font-black text-xl tracking-wide">
