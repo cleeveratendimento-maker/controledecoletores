@@ -23,6 +23,9 @@ import {
   TrendingUp,
   Laptop,
   Smartphone,
+  Globe,
+  PlaneTakeoff,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +33,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import mascotImage from '@/assets/mascot-pilllowtex.jpeg';
 
 interface Device {
