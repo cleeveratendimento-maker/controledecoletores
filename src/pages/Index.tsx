@@ -23,6 +23,9 @@ import {
   TrendingUp,
   Laptop,
   Smartphone,
+  Globe,
+  PlaneTakeoff,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +33,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import mascotImage from '@/assets/mascot-pilllowtex.jpeg';
 
 interface Device {
@@ -864,9 +867,9 @@ const LandingKpiCard = ({
 
   return (
     <motion.div
-      whileHover={{ y: -4, scale: 1.01 }}
+      whileHover={{ y: -6, scale: 1.015 }}
       transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-      className={cn('rounded-3xl border p-5 backdrop-blur-sm', tones[tone])}
+      className={cn('kpi-card-premium rounded-[1.75rem] border p-5 backdrop-blur-sm', tones[tone])}
     >
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className={cn('flex h-12 w-12 items-center justify-center rounded-2xl', iconTones[tone])}>
@@ -880,6 +883,13 @@ const LandingKpiCard = ({
   );
 };
 
+const travelStops = [
+  { city: 'Dubai', position: 'left-[2%] top-[18%]', delay: 0, icon: PlaneTakeoff },
+  { city: 'Lisboa', position: 'right-[6%] top-[14%]', delay: 0.8, icon: MapPin },
+  { city: 'São Paulo', position: 'left-[8%] bottom-[18%]', delay: 1.4, icon: Globe },
+  { city: 'Tokyo', position: 'right-[10%] bottom-[12%]', delay: 2.1, icon: PlaneTakeoff },
+];
+
 const LandingHero = ({
   categoryCards,
 }: {
@@ -891,61 +901,125 @@ const LandingHero = ({
     tone: 'primary' | 'success' | 'destructive';
   }>;
 }) => {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section className="border-b border-border/30 bg-card/10">
       <div className="mx-auto max-w-[1800px] px-5 py-8 lg:px-8 lg:py-10">
-        <div className="grid items-center gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-              <TrendingUp className="h-4 w-4" />
-              Landing de operação por bipagem
-            </div>
+        <div className="hero-panel overflow-hidden rounded-[2rem] px-5 py-6 lg:px-8 lg:py-8">
+          <div className="grid items-center gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                <TrendingUp className="h-4 w-4" />
+                Painel vivo de operação global
+              </div>
 
-            <div className="max-w-3xl space-y-4">
-              <h1 className="font-display text-4xl font-extrabold leading-none tracking-[-0.04em] text-foreground sm:text-5xl xl:text-6xl">
-                Controle de ativos com <span className="neon-text-cyan">entrada e saída por bipagem</span>.
-              </h1>
-              <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Uma primeira página mais comercial para destacar coletores de dados, notebooks e máquinas celulares com o mascote como protagonista visual.
-              </p>
-            </div>
+              <div className="max-w-3xl space-y-4">
+                <h1 className="font-display text-4xl font-extrabold leading-none tracking-[-0.05em] text-foreground sm:text-5xl xl:text-7xl">
+                  O mascote agora está <span className="neon-text-cyan">viajando pelo mundo</span> enquanto o painel acompanha cada bipagem.
+                </h1>
+                <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  Uma vitrine mais premium para o sistema, com presença visual forte, atmosfera internacional e leitura rápida das categorias mais importantes.
+                </p>
+              </div>
 
-            <div className="h-px w-full bg-gradient-to-r from-border via-border/50 to-transparent" />
-
-            <div className="grid gap-4 md:grid-cols-3">
-              {categoryCards.map((card) => (
-                <LandingKpiCard key={card.title} {...card} />
-              ))}
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="relative"
-          >
-            <div className="absolute inset-0 rounded-[2rem] bg-primary/10 blur-3xl" aria-hidden="true" />
-            <div className="absolute inset-x-10 bottom-0 h-24 rounded-full bg-success/10 blur-3xl" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card/70 p-4 shadow-2xl shadow-primary/10 backdrop-blur-xl lg:p-6">
-              <div className="mb-4 flex items-center justify-between rounded-2xl border border-border/40 bg-background/40 px-4 py-3">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Mascote oficial</p>
-                  <p className="text-sm font-semibold text-foreground">PILLOWTEX em destaque</p>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="travel-badge rounded-2xl px-4 py-3">
+                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Rota ativa</div>
+                  <div className="text-sm font-semibold text-foreground">Operação em movimento</div>
                 </div>
-                <div className="rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">Online</div>
+                <div className="travel-badge rounded-2xl px-4 py-3">
+                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-success">Fluxo rápido</div>
+                  <div className="text-sm font-semibold text-foreground">Entrada e saída instantânea</div>
+                </div>
+                <div className="travel-badge rounded-2xl px-4 py-3">
+                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Painel premium</div>
+                  <div className="text-sm font-semibold text-foreground">Mais presença e profundidade</div>
+                </div>
               </div>
 
-              <div className="overflow-hidden rounded-[1.5rem] border border-primary/20 bg-secondary/40">
-                <img
-                  src={mascotImage}
-                  alt="Mascote da operação de equipamentos da Zona Criativa"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
+              <div className="h-px w-full bg-gradient-to-r from-border via-border/50 to-transparent" />
+
+              <div className="grid gap-4 md:grid-cols-3">
+                {categoryCards.map((card) => (
+                  <LandingKpiCard key={card.title} {...card} />
+                ))}
               </div>
             </div>
-          </motion.div>
+
+            <motion.div
+              initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.96, y: 20 }}
+              animate={prefersReducedMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
+              className="relative min-h-[420px]"
+            >
+              <div className="absolute inset-0 rounded-[2rem] bg-primary/10 blur-3xl" aria-hidden="true" />
+              <div className="absolute inset-x-12 bottom-0 h-28 rounded-full bg-success/10 blur-3xl" aria-hidden="true" />
+              <div className="absolute inset-0 world-drift">
+                <div className="world-ring absolute left-1/2 top-1/2 h-[84%] w-[84%] -translate-x-1/2 -translate-y-1/2 rounded-full" />
+                <div className="world-ring-secondary world-spin absolute left-1/2 top-1/2 h-[64%] w-[64%] -translate-x-1/2 -translate-y-1/2 rounded-full" />
+                <div className="world-ring-secondary absolute left-1/2 top-1/2 h-[96%] w-[96%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60" />
+              </div>
+
+              {travelStops.map((stop, index) => {
+                const StopIcon = stop.icon;
+                return (
+                  <motion.div
+                    key={stop.city}
+                    className={cn('travel-badge absolute z-20 rounded-full px-4 py-2.5', stop.position, index % 2 === 0 ? 'world-drift' : 'world-drift-slow')}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                    animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                    transition={{ delay: stop.delay, duration: 0.45 }}
+                  >
+                    <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                      <StopIcon className="h-4 w-4 text-primary" />
+                      {stop.city}
+                    </div>
+                  </motion.div>
+                );
+              })}
+
+              <div className="relative flex h-full items-center justify-center px-4 py-8">
+                <div className="mascot-frame relative w-full max-w-[32rem] overflow-hidden rounded-[2rem] border border-border/50 p-5 backdrop-blur-xl lg:p-6">
+                  <div className="mb-4 flex items-center justify-between rounded-2xl border border-border/40 bg-background/40 px-4 py-3">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Mascote em viagem</p>
+                      <p className="text-sm font-semibold text-foreground">PILLOWTEX World Tour</p>
+                    </div>
+                    <div className="rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">Ao vivo</div>
+                  </div>
+
+                  <div className="relative overflow-hidden rounded-[1.75rem] border border-primary/20 bg-secondary/40">
+                    <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-primary/10 to-transparent" aria-hidden="true" />
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background/40 to-transparent" aria-hidden="true" />
+                    <motion.img
+                      src={mascotImage}
+                      alt="Mascote da operação viajando pelo mundo"
+                      className={cn('h-full w-full object-cover', !prefersReducedMotion && 'mascot-float')}
+                      loading="lazy"
+                      animate={prefersReducedMotion ? undefined : { scale: [1, 1.03, 1], rotate: [-1, 1.5, -1] }}
+                      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div className="travel-badge rounded-2xl px-4 py-3">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Destino</div>
+                      <div className="mt-1 text-sm font-semibold text-foreground">Operação global</div>
+                    </div>
+                    <div className="travel-badge rounded-2xl px-4 py-3">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-success">Status</div>
+                      <div className="mt-1 text-sm font-semibold text-foreground">Painel em movimento</div>
+                    </div>
+                    <div className="travel-badge rounded-2xl px-4 py-3">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Mood</div>
+                      <div className="mt-1 text-sm font-semibold text-foreground">Premium + lúdico</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -1013,7 +1087,12 @@ const Index = () => {
   ];
 
   return (
-    <div className="cyber-grid min-h-screen flex flex-col">
+    <div className="dashboard-shell cyber-grid min-h-screen flex flex-col overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-[-12rem] top-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute right-[-10rem] top-[26rem] h-72 w-72 rounded-full bg-success/10 blur-3xl" />
+      </div>
+
       <AnimatePresence>
         {notification && <Notification message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
       </AnimatePresence>
@@ -1023,8 +1102,8 @@ const Index = () => {
 
       <div className="flex flex-1 overflow-hidden">
         <main className="flex flex-1 flex-col overflow-hidden">
-          <div className="border-b border-border/30 bg-card/20 backdrop-blur-sm">
-            <div className="mx-auto max-w-[1800px] p-5 lg:p-6">
+          <div className="px-5 pb-5 pt-5 lg:px-6 lg:pb-6">
+            <div className="mx-auto max-w-[1800px] rounded-[2rem] border border-border/40 bg-card/30 p-5 shadow-2xl shadow-background/30 backdrop-blur-xl lg:p-6">
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <ScanInput onScan={scanDevice} onNotification={showNotification} />
                 <AddDeviceForm onAdd={addDevice} onNotification={showNotification} />
@@ -1065,7 +1144,7 @@ const Index = () => {
           </div>
 
           <ScrollArea className="flex-1">
-            <div className="mx-auto max-w-[1800px] p-5 lg:p-6">
+            <div className="mx-auto max-w-[1800px] px-5 pb-6 lg:px-6 lg:pb-8">
               {devices.length > 0 && logs.length > 0 && (
                 <div className="mb-6 xl:hidden">
                   <QuickDashboard logs={logs} />
@@ -1073,78 +1152,82 @@ const Index = () => {
               )}
 
               {devices.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-muted-foreground">
-                  <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-muted/50">
+                <div className="rounded-[2rem] border border-border/40 bg-card/30 py-24 text-center text-muted-foreground backdrop-blur-xl">
+                  <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-muted/50">
                     <ScanBarcode className="h-12 w-12 opacity-30" />
                   </motion.div>
                   <h2 className="mb-2 text-xl font-bold text-foreground">Nenhum Equipamento</h2>
-                  <p className="max-w-md text-center text-sm leading-relaxed">
+                  <p className="mx-auto max-w-md text-sm leading-relaxed">
                     Adicione equipamentos para começar a controlar empréstimos e devoluções.
                   </p>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  {borrowedDevices.length > 0 && (
-                    <section>
-                      <div className="mb-4 flex items-center gap-3">
-                        <div className="h-3 w-3 animate-pulse rounded-full bg-destructive shadow-[0_0_8px_hsl(var(--destructive)/0.5)]" />
-                        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-destructive">Em Uso ({borrowedDevices.length})</h2>
-                        <div className="h-px flex-1 bg-gradient-to-r from-destructive/20 to-transparent" />
-                      </div>
-                      <div
-                        className={cn(
-                          'grid gap-3',
-                          viewMode === 'compact'
-                            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
-                            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8',
-                        )}
-                      >
-                        {borrowedDevices.map((device) => (
-                          <DeviceCard key={device.id} device={device} compact={viewMode === 'compact'} />
-                        ))}
-                      </div>
-                    </section>
-                  )}
+                <div className="rounded-[2rem] border border-border/40 bg-card/20 p-5 backdrop-blur-xl lg:p-6">
+                  <div className="space-y-8">
+                    {borrowedDevices.length > 0 && (
+                      <section>
+                        <div className="mb-4 flex items-center gap-3">
+                          <div className="h-3 w-3 animate-pulse rounded-full bg-destructive shadow-[0_0_8px_hsl(var(--destructive)/0.5)]" />
+                          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-destructive">Em Uso ({borrowedDevices.length})</h2>
+                          <div className="h-px flex-1 bg-gradient-to-r from-destructive/20 to-transparent" />
+                        </div>
+                        <div
+                          className={cn(
+                            'grid gap-3',
+                            viewMode === 'compact'
+                              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
+                              : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8',
+                          )}
+                        >
+                          {borrowedDevices.map((device) => (
+                            <DeviceCard key={device.id} device={device} compact={viewMode === 'compact'} />
+                          ))}
+                        </div>
+                      </section>
+                    )}
 
-                  {availableDevices.length > 0 && (
-                    <section>
-                      <div className="mb-4 flex items-center gap-3">
-                        <div className="h-3 w-3 rounded-full bg-success shadow-[0_0_8px_hsl(var(--success)/0.5)]" />
-                        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-success">Disponíveis ({availableDevices.length})</h2>
-                        <div className="h-px flex-1 bg-gradient-to-r from-success/20 to-transparent" />
-                      </div>
-                      <div
-                        className={cn(
-                          'grid gap-3',
-                          viewMode === 'compact'
-                            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
-                            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8',
-                        )}
-                      >
-                        {availableDevices.map((device) => (
-                          <DeviceCard key={device.id} device={device} onRemove={handleRemove} compact={viewMode === 'compact'} />
-                        ))}
-                      </div>
-                    </section>
-                  )}
+                    {availableDevices.length > 0 && (
+                      <section>
+                        <div className="mb-4 flex items-center gap-3">
+                          <div className="h-3 w-3 rounded-full bg-success shadow-[0_0_8px_hsl(var(--success)/0.5)]" />
+                          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-success">Disponíveis ({availableDevices.length})</h2>
+                          <div className="h-px flex-1 bg-gradient-to-r from-success/20 to-transparent" />
+                        </div>
+                        <div
+                          className={cn(
+                            'grid gap-3',
+                            viewMode === 'compact'
+                              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
+                              : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8',
+                          )}
+                        >
+                          {availableDevices.map((device) => (
+                            <DeviceCard key={device.id} device={device} onRemove={handleRemove} compact={viewMode === 'compact'} />
+                          ))}
+                        </div>
+                      </section>
+                    )}
 
-                  {filteredDevices.length === 0 && devices.length > 0 && (
-                    <div className="py-20 text-center text-muted-foreground">
-                      <Search className="mx-auto mb-3 h-10 w-10 opacity-20" />
-                      <p className="text-sm font-medium">Nenhum resultado para "{searchFilter}"</p>
-                    </div>
-                  )}
+                    {filteredDevices.length === 0 && devices.length > 0 && (
+                      <div className="py-20 text-center text-muted-foreground">
+                        <Search className="mx-auto mb-3 h-10 w-10 opacity-20" />
+                        <p className="text-sm font-medium">Nenhum resultado para "{searchFilter}"</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
           </ScrollArea>
         </main>
 
-        <div className="hidden xl:flex flex-col">
-          <div className="border-b border-border/30 p-4">
+        <div className="hidden xl:flex flex-col px-6 pb-8">
+          <div className="mb-4 rounded-[2rem] border border-border/40 bg-card/30 p-4 backdrop-blur-xl">
             <QuickDashboard logs={logs} />
           </div>
-          <LogsSidebar logs={logs} />
+          <div className="overflow-hidden rounded-[2rem] border border-border/40 bg-card/20 backdrop-blur-xl">
+            <LogsSidebar logs={logs} />
+          </div>
         </div>
       </div>
     </div>
